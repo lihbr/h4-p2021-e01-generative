@@ -16,10 +16,7 @@
     "yarn": ">=1.13.0"
   },
   "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint",
-      "commit-msg": "commitlint --env HUSKY_GIT_PARAMS"
-    }
+    "hooks": {}
   },
   "dependencies": {
     "color": "3.1.2",
