@@ -1,15 +1,21 @@
 <template>
   <div class="home">
-    home
+    <home-hero />
+    <home-about />
+    <home-form />
   </div>
 </template>
 
 <script>
-// import Component from "~/components/Component.vue"
+import HomeHero from "~/components/sections/home/Hero.vue";
+import HomeAbout from "~/components/sections/home/About.vue";
+import HomeForm from "~/components/sections/home/Form.vue";
 
 export default {
   components: {
-    // Component
+    HomeHero,
+    HomeAbout,
+    HomeForm
   },
   mounted() {
     this.$store.dispatch("pageChanged");
