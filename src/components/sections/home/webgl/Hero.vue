@@ -26,8 +26,7 @@ export default {
     if (this.$options._supportWebGl) {
       const Application = (await import("~/assets/js/webgl/Application"))
         .default;
-      const WorldHero = (await import("~/assets/js/webgl/world/WorldHero"))
-        .default;
+      const WorldHero = (await import("~/assets/js/webgl/World/Hero")).default;
 
       this.$options._application = new Application(
         this.$refs.container,

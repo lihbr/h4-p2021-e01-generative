@@ -26,8 +26,7 @@ export default {
     if (this.$options._supportWebGl) {
       const Application = (await import("~/assets/js/webgl/Application"))
         .default;
-      const WorldForm = (await import("~/assets/js/webgl/world/WorldForm"))
-        .default;
+      const WorldForm = (await import("~/assets/js/webgl/World/Form")).default;
 
       this.$options._application = new Application(
         this.$refs.container,
