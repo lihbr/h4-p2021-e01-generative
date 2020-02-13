@@ -1,12 +1,11 @@
 import logger from "~/assets/js/logger";
 
 import Core from "./Core";
-import World from "./World";
 
 import { Scene } from "three";
 
 export default class Application {
-  constructor($container) {
+  constructor($container, WorldClass) {
     this._$container = $container;
     this._$canvas = $container.querySelector(".canvas");
 
@@ -14,11 +13,11 @@ export default class Application {
       return logger.error(".canvas not found inside container!");
     }
 
-    this.init();
+    this.init(WorldClass);
     this.start();
   }
 
-  init() {
+  init(WorldClass) {
     this.time = new Core.Time();
     this.sizes = new Core.Sizes();
     this.mouse = new Core.Mouse(this.time, this.sizes);
@@ -28,7 +27,7 @@ export default class Application {
     this.render = new Core.Render(this);
     this.camera = new Core.Camera(this);
 
-    this.world = new World(this);
+    this.world = new WorldClass(this);
     this.world.load(this);
 
     this.passes = new Core.Passes(this);

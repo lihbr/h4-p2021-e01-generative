@@ -94,9 +94,12 @@ export default class Cup {
     supports.position.y = height / 20 - height / 2;
     this.cup.add(supports);
 
-    this.cup.rotation.x = -Math.PI / 2;
+    this.cup.rotation.set(-Math.PI / 2, 0, 0);
     this.cup.scale.set(5, 5, 5);
 
-    this.object.add(this.cup);
+    this.object.name = `cup-${this.object.uuid}`;
+    const _buffer = new Object3D();
+    _buffer.add(this.cup);
+    this.object.add(_buffer);
   }
 }

@@ -8,7 +8,7 @@ import {
 
 import Cup from "./Cup";
 
-export default class World {
+export default class WorldHero {
   constructor(ctx) {
     this._ctx = ctx;
 
@@ -43,30 +43,26 @@ export default class World {
   createCup(ctx) {
     this.cupsContainer = new Object3D();
 
-    const cup = new Cup();
-
-    cup.object.scale.set(0.5, 0.5, 0.5);
-
     const cups = {
-      first: cup.object.clone(),
-      second: cup.object.clone()
+      first: new Cup().object,
+      second: new Cup().object
     };
 
     cups.first.rotation.x = Math.PI / 2.4;
     cups.first.rotation.y = (Math.PI * 2) / 7;
     cups.first.position.x = 20;
-    cups.first.position.y = -10;
+    cups.first.position.y = -15;
     cups.first.position.z = -25 - 100;
 
     cups.second.rotation.x = Math.PI / 7;
     cups.second.rotation.y = -Math.PI / 9;
     cups.second.position.x = 100;
     cups.second.position.y = 10;
-    cups.second.position.z = 15 - 150;
+    cups.second.position.z = 20 - 150;
 
     ctx.animationController.add({
       mesh: cups.first,
-      position: [0, -10, -25],
+      position: [0, -15, -25],
       scale: [1, 1, 1],
       duration: 3000,
       timingFunction: "easeInOutQuint",
@@ -76,7 +72,7 @@ export default class World {
 
     ctx.animationController.add({
       mesh: cups.second,
-      position: [0, 10, 15],
+      position: [0, 10, 20],
       scale: [1, 1, 1],
       duration: 3000,
       timingFunction: "easeInOutQuint",
@@ -110,7 +106,54 @@ export default class World {
     );
 
     if (intersects.length) {
-      console.log(intersects);
+      // Get closest
+      let closest = intersects[0];
+      for (const intersect of intersects) {
+        if (intersect.distance < closest.distance) {
+          closest = intersect;
+        }
+      }
+      closest = closest.object;
+
+      let found = false;
+      for (let depth = 0; depth < 5 && closest.parent; depth++) {
+        if (closest.name.startsWith("cup-")) {
+          found = true;
+          break;
+        } else {
+          closest = closest.parent;
+        }
+      }
+
+      if (found) {
+        if (
+          typeof this._hovered === "undefined" ||
+          this._hovered.name !== closest.name
+        ) {
+          this._hovered = closest;
+        }
+      } else {
+        this._hovered = undefined;
+      }
+    } else {
+      this._hovered = undefined;
+    }
+
+    for (const cupName in this._cups) {
+      const cup = this._cups[cupName];
+      let currentS = cup.scale.x;
+      let currentR = cup.children[0].rotation.z;
+      let s;
+      let r;
+      if (this._hovered && cup.name === this._hovered.name) {
+        s = Math.min(1.1, currentS * 1.0075 + 0.001);
+        r = Math.min(Math.PI * 2, currentR * 1.05 + Math.PI / 30);
+      } else {
+        s = Math.max(1, currentS * 0.9925 - 0.001);
+        r = Math.max(0, currentR * 0.95 - Math.PI / 30);
+      }
+      cup.scale.set(s, s, s);
+      cup.children[0].rotation.set(0, 0, r);
     }
   }
 }
