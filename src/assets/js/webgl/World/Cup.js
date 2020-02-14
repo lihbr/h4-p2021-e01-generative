@@ -1,14 +1,20 @@
 import {
   Mesh,
   Object3D,
-  CylinderBufferGeometry,
+  CylinderGeometry,
   DoubleSide,
   FrontSide,
   BackSide,
   RingBufferGeometry,
   CircleBufferGeometry,
   BoxBufferGeometry,
-  MeshPhysicalMaterial
+  MeshPhysicalMaterial,
+  ClampToEdgeWrapping,
+  CubeUVReflectionMapping,
+  MeshBasicMaterial,
+  TextureLoader,
+  RepeatWrapping,
+  Vector2
 } from "three";
 
 export default class Cup {
@@ -17,10 +23,23 @@ export default class Cup {
     radiusBottom = 2.5,
     height = 11.5,
     supportsNum = 9,
-    details = 30
+    details = 30,
+    texturePath
   } = {}) {
     this.object = new Object3D();
     this.cup = new Object3D();
+
+    const loader = new TextureLoader();
+    const texture = loader.load(texturePath);
+    texture.wrapS = ClampToEdgeWrapping;
+    texture.wrapT = ClampToEdgeWrapping;
+    texture.repeat.set(1, 1);
+
+    const textureMaterial = new MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      side: DoubleSide
+    });
 
     const material = {
       color: 0xbbbbaa,
@@ -46,7 +65,7 @@ export default class Cup {
       side: DoubleSide
     });
 
-    const bodyGeometry = new CylinderBufferGeometry(
+    const bodyGeometry = new CylinderGeometry(
       radiusTop,
       radiusBottom,
       height,
@@ -57,6 +76,12 @@ export default class Cup {
 
     const outerSide = new Mesh(bodyGeometry, frontMaterial);
     this.cup.add(outerSide);
+
+    const outerSideTexture = new Mesh(
+      bodyGeometry.clone().scale(1.001, 1.001, 1.001),
+      textureMaterial
+    );
+    this.cup.add(outerSideTexture);
 
     const innerSide = new Mesh(
       bodyGeometry.clone().scale(0.96, 1, 0.96),

@@ -41,7 +41,7 @@ export default class WorldHero {
   }
 
   createCup(ctx) {
-    this._cup = new Cup().object;
+    this._cup = new Cup({ texturePath: "/assets/img/sample4.png" }).object;
 
     this._cup.children[0].scale.set(1.3, 1.3, 1.3);
 
