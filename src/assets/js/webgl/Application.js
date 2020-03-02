@@ -7,11 +7,16 @@ import { Scene } from "three";
 export default class Application {
   constructor($container, WorldClass) {
     this._$container = $container;
-    this._$canvas = $container.querySelector(".canvas");
-
+    this._$canvas = $container.querySelector(".webgl");
     if (!this._$canvas) {
-      return logger.error(".canvas not found inside container!");
+      return logger.error(".webgl not found inside container!");
     }
+
+    const $ctx2d = $container.querySelector(".ctx2d");
+    if (!$ctx2d) {
+      return logger.error(".ctx2d not found inside container!");
+    }
+    this._ctx2d = $ctx2d.getContext("2d");
 
     this.init(WorldClass);
     this.start();
@@ -26,6 +31,8 @@ export default class Application {
     this.scene = new Scene();
     this.render = new Core.Render(this);
     this.camera = new Core.Camera(this);
+
+    this.generator = new Core.Generator(this);
 
     this.world = new WorldClass(this);
     this.world.load(this);

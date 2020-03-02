@@ -44,8 +44,8 @@ export default class WorldHero {
     this.cupsContainer = new Object3D();
 
     const cups = {
-      first: new Cup({ texturePath: "/assets/img/sample2.png" }).object,
-      second: new Cup({ texturePath: "/assets/img/sample3.png" }).object
+      first: new Cup({ imageData: ctx.generator.generate() }).object,
+      second: new Cup({ imageData: ctx.generator.generate() }).object
     };
 
     cups.first.rotation.x = Math.PI / 2.4;

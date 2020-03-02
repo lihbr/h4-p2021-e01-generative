@@ -5,6 +5,7 @@ import Render from "./Render";
 import Camera from "./Camera";
 import Passes from "./Passes";
 import AnimationController from "./AnimationController";
+import Generator from "./Generator";
 import EventEmitter from "./EventEmitter";
 
 export default {
@@ -15,5 +16,6 @@ export default {
   Camera,
   Passes,
   AnimationController,
+  Generator,
   EventEmitter
 };

@@ -2,8 +2,9 @@
   <div
     class="webglForm top-0 left-0 w-full h-screen pointer-events-none overflow-hidden"
   >
-    <div ref="container" class="webgl" :class="{ hidden: !inited }">
-      <canvas class="canvas absolute top-0 left-0 w-full h-screen" />
+    <div ref="container" :class="{ hidden: !inited }">
+      <canvas class="webgl absolute top-0 left-0 w-full h-screen" />
+      <canvas class="ctx2d" width="1900" height="1150" />
     </div>
   </div>
 </template>
@@ -41,3 +42,9 @@ export default {
   }
 };
 </script>
+
+<style lang="sass" scoped>
+.ctx2d
+  transform-origin: 0 0
+  transform: scale(0.5)
+</style>
