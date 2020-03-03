@@ -44,8 +44,10 @@ export default class WorldHero {
     this.cupsContainer = new Object3D();
 
     const cups = {
-      first: new Cup({ imageData: ctx.generator.generate() }).object,
-      second: new Cup({ imageData: ctx.generator.generate() }).object
+      first: new Cup({
+        imageData: ctx.generator.generate(1, "UNITED STATES OF AMERICA")
+      }).object,
+      second: new Cup({ imageData: ctx.generator.generate(2, "JAPAN") }).object
     };
 
     cups.first.rotation.x = Math.PI / 2.4;
@@ -148,6 +150,8 @@ export default class WorldHero {
       if (this._hovered && cup.name === this._hovered.name) {
         s = Math.min(1.1, currentS * 1.0075 + 0.001);
         r = Math.min(Math.PI * 2, currentR * 1.05 + Math.PI / 30);
+
+        this._ctx.generator.generate();
       } else {
         s = Math.max(1, currentS * 0.9925 - 0.001);
         r = Math.max(0, currentR * 0.95 - Math.PI / 30);

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="webglHero top-0 left-0 w-full h-screen pointer-events-none overflow-visible"
+    class="webglHero top-0 left-0 w-full h-screen pointer-events-none overflow-hidden"
   >
     <div ref="container" :class="{ hidden: !inited }">
       <canvas class="webgl absolute top-0 left-0 w-full h-screen" />
@@ -47,4 +47,5 @@ export default {
 .ctx2d
   transform-origin: 0 0
   transform: scale(0.5)
+  background: #bbbbaa
 </style>

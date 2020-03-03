@@ -41,7 +41,9 @@ export default class WorldHero {
   }
 
   createCup(ctx) {
-    this._cup = new Cup({ imageData: ctx.generator.generate() }).object;
+    this._cup = new Cup({
+      imageData: ctx.generator.generate(3, "ITALY")
+    }).object;
 
     this._cup.children[0].scale.set(1.3, 1.3, 1.3);
 

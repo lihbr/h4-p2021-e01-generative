@@ -32,7 +32,7 @@ export default class Application {
     this.render = new Core.Render(this);
     this.camera = new Core.Camera(this);
 
-    this.generator = new Core.Generator(this);
+    this.generator = new Core.Generator(this, "PARIS 2024");
 
     this.world = new WorldClass(this);
     this.world.load(this);
