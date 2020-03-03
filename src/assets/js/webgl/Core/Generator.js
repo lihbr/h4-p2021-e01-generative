@@ -1,138 +1,30 @@
 import seedrandom from "seedrandom";
 
-export default class Generator {
-  constructor(ctx, prefix) {
-    this._ctx = ctx;
-    this._ctx2d = ctx._ctx2d;
-    this._prefix = prefix;
-
-    // Generator config
-    this._w = 1900;
-    this._h = 1150;
-
-    this._hsl = {
-      saturation: {
-        base: 90,
-        amplitude: 5
-      },
-      lightness: {
-        base: 55,
-        amplitude: 5
-      }
-    };
-
-    this._black = "#282423";
-    this._strokeWidth = 10;
-
-    // this._globalCompositeOperation = "hard-light";
-    this._globalCompositeOperation = "exclusion";
+const BLACK = "#282423";
+const STROKE_WIDTH = 10;
+const COMPOSITE_OPERATION = "exclusion";
+const HSL = {
+  saturation: {
+    base: 90,
+    amplitude: 5
+  },
+  lightness: {
+    base: 55,
+    amplitude: 5
   }
+};
+const COLOR_NUM = [2, 3]; // always 2
+const RECT_NUM = [8, 14];
+const RECT_WIDTH = [50, 400];
+const RECT_HEIGHT = [200, 400];
 
-  generate(seed, country = "Germany") {
-    this.initPrng(seed);
-    this.clear();
-    const { _ctx2d: ctx, _w: w, _h: h } = this;
+const round = (value, precision = 1) => {
+  return Math.round(value / precision) * precision;
+};
 
-    ctx.globalCompositeOperation = this._globalCompositeOperation;
+class RandomHelper {
+  constructor() {}
 
-    const colorNum = this.randomInt(2, 4);
-    const startHue = this.randomInt(256);
-    const colors = [this.randomHsl(startHue)];
-    for (let i = 1; i < colorNum; i++) {
-      colors.push(
-        this.randomHsl(
-          startHue + i * (256 / colorNum / 2) + this.randomInt(-25, 25)
-        )
-      );
-    }
-    let colorIndex = this.randomInt(colors.length);
-
-    const rectNum = this.randomInt(8, 14);
-    for (let i = 0; i < rectNum; i++) {
-      const width = this.round(this.randomInt(50, 400), 100);
-      const height = this.round(this.randomInt(200, 400), 100);
-
-      const x = this.round(
-        (w - width) / 2 + this.randomInt(-w / 2, w / 2),
-        200
-      );
-      const y = this.round(
-        (h - height) / 2 + this.randomInt(-h / 4.5, h / 4),
-        200
-      );
-
-      const angle =
-        45 *
-        this.randomInt(2) *
-        (Math.PI / 180) *
-        this.randomInt(2) *
-        this.randomInt(2);
-      // const angle = 0;
-
-      const draw = () => {
-        ctx.rotate(angle);
-        ctx.beginPath();
-        ctx.rect(-width / 2, -height / 2, width, height);
-        ctx.fillStyle = colors[colorIndex % colors.length];
-        ctx.fill();
-
-        if (i === rectNum - 1) {
-          ctx.globalCompositeOperation = "source-over";
-
-          ctx.beginPath();
-          ctx.rect(-width / 2, -height / 2, w * 2, h * 2);
-          ctx.strokeStyle = this._black;
-          ctx.lineWidth = this._strokeWidth;
-          ctx.stroke();
-
-          ctx.beginPath();
-          ctx.font = "bold 30px monospace";
-          ctx.fillStyle = this._black;
-          const offset = y > 100 ? -14 : 34;
-          ctx.fillText(this.getText(country), 0, -height / 2 + offset);
-
-          ctx.globalCompositeOperation = this._globalCompositeOperation;
-        }
-
-        ctx.rotate(-angle);
-      };
-
-      colorIndex++;
-      ctx.translate(x + width / 2, y + height / 2);
-      ctx.translate(-w, 0);
-      draw();
-      ctx.translate(w, 0);
-      draw();
-      ctx.translate(w, 0);
-      draw();
-      ctx.translate(-w, 0);
-      ctx.translate(-x - width / 2, -y - height / 2);
-    }
-
-    // ctx.beginPath();
-    // ctx.lineWidth = this.round(this.randomInt(30, 100), 10);
-    // ctx.strokeStyle = this.randomHsl();
-    // ctx.arc(w / 2, h / 2, 100, 0, Math.PI * 2);
-    // ctx.stroke();
-
-    return ctx.getImageData(0, 0, w, h);
-  }
-
-  clear() {
-    this._ctx2d.clearRect(0, 0, this._w, this._h);
-  }
-
-  round(value, precision = 1) {
-    return Math.round(value / precision) * precision;
-  }
-
-  getText(country) {
-    return `${this._prefix} - ${country}`.toUpperCase();
-  }
-
-  /**
-   * PRNG
-   */
   randomInt(start, end) {
     if (!this.hasPrng()) {
       return;
@@ -165,7 +57,7 @@ export default class Generator {
       hue %= 256;
     }
 
-    const { saturation, lightness } = this._hsl;
+    const { saturation, lightness } = HSL;
 
     const samp = this.randomInt(-saturation.amplitude, saturation.amplitude);
     const lamp = this.randomInt(-lightness.amplitude, lightness.amplitude);
@@ -176,7 +68,7 @@ export default class Generator {
   hasPrng() {
     if (typeof this._prng === "undefined") {
       console.error(
-        "Instance of Generator does not have it's PRNG defined yet"
+        "Instance of RandomHelper does not have it's PRNG defined yet, use this.initPrng()"
       );
       return false;
     } else {
@@ -190,5 +82,155 @@ export default class Generator {
     } else {
       this._prng = new seedrandom();
     }
+  }
+}
+
+/**
+ * Rect class
+ */
+class Rect extends RandomHelper {
+  constructor(prng, color, ctx, ctxW, ctxH, precision = 100) {
+    super();
+    this._prng = prng;
+    this._color = color;
+    this._ctx = ctx;
+    this._ctxW = ctxW;
+    this._ctxH = ctxH;
+    this._precision = precision;
+
+    this.w = round(this.randomInt(...RECT_WIDTH), this._precision);
+    this.h = round(this.randomInt(...RECT_HEIGHT), this._precision);
+
+    this.startX = round(
+      (this._ctxW - this.w) / 2 +
+        this.randomInt(-this._ctxW / 2, this._ctxW / 2),
+      this._precision * 2
+    );
+
+    this.startY = round(
+      (this._ctxH - this.h) / 2 +
+        this.randomInt(-this._ctxH / 3.5, this._ctxH / 4),
+      this._precision * 2
+    );
+
+    // 45° 25%
+    this.angle =
+      45 * this.randomInt(2) * (Math.PI / 180) * (this.randomInt(3) === 0);
+
+    // Wrap 3 times
+    this.drawShape = this._draw.bind(this, this._drawShape.bind(this));
+    this.drawText = this._draw.bind(this, this._drawText.bind(this));
+  }
+
+  _drawShape() {
+    this._ctx.rotate(this.angle);
+
+    this._ctx.beginPath();
+    this._ctx.rect(-this.w / 2, -this.h / 2, this.w, this.h);
+    this._ctx.globalCompositeOperation = COMPOSITE_OPERATION;
+    this._ctx.fillStyle = this._color;
+    this._ctx.fill();
+
+    this._ctx.rotate(-this.angle);
+  }
+
+  _drawText(text) {
+    this._ctx.rotate(this.angle);
+
+    this._ctx.globalCompositeOperation = "source-over";
+
+    this._ctx.beginPath();
+    this._ctx.rect(-this.w / 2, -this.h / 2, this._ctxW * 2, this._ctxH * 2);
+    this._ctx.strokeStyle = BLACK;
+    this._ctx.lineWidth = STROKE_WIDTH;
+    this._ctx.stroke();
+
+    this._ctx.beginPath();
+    this._ctx.font = "bold 30px monospace";
+    this._ctx.fillStyle = BLACK;
+    const offset = this.startY > 100 ? -14 : 34;
+
+    this._ctx.fillText(text, 0, -this.h / 2 + offset);
+
+    this._ctx.rotate(-this.angle);
+  }
+
+  // Wrap drawingCallback 3 times
+  _draw(drawingCallback, ...args) {
+    this._ctx.translate(this.startX + this.w / 2, this.startY + this.h / 2);
+    this._ctx.translate(-this._ctxW, 0);
+    drawingCallback(...args);
+    this._ctx.translate(this._ctxW, 0);
+    drawingCallback(...args);
+    this._ctx.translate(this._ctxW, 0);
+    drawingCallback(...args);
+    this._ctx.translate(-this._ctxW, 0);
+    this._ctx.translate(-this.startX - this.w / 2, -this.startY - this.h / 2);
+  }
+}
+
+export default class Generator extends RandomHelper {
+  constructor(ctx, prefix) {
+    super();
+
+    this._ctx = ctx;
+    this._ctx2d = ctx._ctx2d;
+    this._prefix = prefix;
+
+    // Generator config
+    this._w = 1900;
+    this._h = 1150;
+  }
+
+  generate(seed, country = "Germany") {
+    this.initPrng(seed);
+    this.clear();
+    const { _ctx2d: ctx, _w: w, _h: h } = this;
+
+    ctx.globalCompositeOperation = this._globalCompositeOperation;
+
+    const colors = this.getColors();
+
+    const rectNum = this.randomInt(...RECT_NUM);
+    const rects = [];
+    for (let i = 0; i < rectNum; i++) {
+      const rect = new Rect(this._prng, colors[i % colors.length], ctx, w, h);
+      rect.drawShape();
+      rects.push(rect);
+    }
+
+    rects[0].drawText(this.getText(country));
+
+    // ctx.beginPath();
+    // ctx.lineWidth = this.round(this.randomInt(30, 100), 10);
+    // ctx.strokeStyle = this.randomHsl();
+    // ctx.arc(w / 2, h / 2, 100, 0, Math.PI * 2);
+    // ctx.stroke();
+
+    return ctx.getImageData(0, 0, w, h);
+  }
+
+  getColors() {
+    const colorNum = this.randomInt(...COLOR_NUM);
+    const startOffset = this.randomInt(256);
+    const colors = [];
+
+    for (let i = 0; i < colorNum; i++) {
+      colors.push(
+        this.randomHsl(
+          startOffset + i * (256 / colorNum / 1.5) + this.randomInt(-8, 8)
+        )
+      );
+    }
+
+    return colors;
+  }
+
+  clear() {
+    this._ctx2d.clearRect(0, 0, this._w, this._h);
+  }
+
+  getText(country) {
+    return `${this._prefix} - ${country}`.toUpperCase();
   }
 }
