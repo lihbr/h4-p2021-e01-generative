@@ -1,10 +1,10 @@
 <template>
   <div
-    class="webglForm top-0 left-0 w-full h-screen pointer-events-none overflow-hidden"
+    class="webglForm top-0 left-0 w-full pointer-events-none overflow-hidden"
   >
     <div ref="container" :class="{ hidden: !inited }">
-      <canvas class="webgl absolute top-0 left-0 w-full h-screen" />
-      <canvas class="ctx2d" width="1900" height="1150" />
+      <canvas class="webgl absolute bottom-0 left-0 w-full h-full" />
+      <canvas class="ctx2d hidden" width="1900" height="1150" />
     </div>
   </div>
 </template>
@@ -31,7 +31,8 @@ export default {
 
       this.$options._application = new Application(
         this.$refs.container,
-        WorldForm
+        WorldForm,
+        "single"
       );
     }
   },

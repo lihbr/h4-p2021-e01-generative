@@ -3,15 +3,18 @@ const Color = require("color");
 /**
  * Start generic project config
  */
-const col = 120;
-const baseDuration = 1500;
+const col = 100;
+const baseDuration = 750;
+const gutter = 40;
 
 const colors = {
-  black: "#111111",
+  black: "#27251f",
   white: "#fefefe",
-  green: "#19421a",
-  yellow: "#f7c13b",
-  red: "#df0001"
+  lightGrey: "#f8f8f8",
+  grey: "#757575",
+  green: "#205430",
+  yellow: "#ffc72c",
+  red: "#da291c"
 };
 const colorOpacityVariants = [20];
 const colorLightenVariants = [20];
@@ -34,7 +37,19 @@ module.exports = {
     },
     fontFamily: {
       main: [
-        "Roboto",
+        "Helvetica Neue",
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "Segoe UI",
+        "Helvetica",
+        "Arial",
+        "sans-serif",
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol"
+      ],
+      sub: [
+        "Museo Slab",
         "-apple-system",
         "BlinkMacSystemFont",
         "Segoe UI",
@@ -93,6 +108,7 @@ module.exports = {
       m: "1rem", //         16px
       l: "1.125rem", //     18px
       xl: "1.25rem", //     20px
+      xlAlt: "1.375rem", // 22px
       "2xl": "1.5rem", //   24px
       "3xl": "1.75rem", //  28px
       "4xl": "2rem", //     32px
@@ -192,24 +208,30 @@ module.exports = {
           none: "none",
           inherit: "inherit",
           "5/2": "10px", // 10px
-          "-5/2": "-10", // -10px
-          semicol: `${col * 0.5}px`, // 60px
-          "-semicol": `${col * -0.5}px`, // -60px
-          "col-3/4": `${col * 0.75}px`, // 90px
-          "-col-3/4": `${col * -0.75}px`, // -90px
-          col: `${col}px`, // 120px
-          "col-1": `${col}px`, // 120px
-          "col-2": `${col * 2}px`, // 240px
-          "col-3": `${col * 3}px`, // 360px
-          "col-4": `${col * 4}px`, // 480px
-          "col-5": `${col * 5}px`, // 600px
-          "col-6": `${col * 6}px`, // 720px
-          "col-7": `${col * 7}px`, // 840px
-          "col-8": `${col * 8}px`, // 960px
-          "col-9": `${col * 9}px`, // 1080px
-          "col-10": `${col * 10}px`, // 1200px
-          "col-11": `${col * 11}px`, // 1320px
-          "col-12": `${col * 12}px` // 1440px
+          "-5/2": "-10px", // -10px
+          "gut-1/2": `${gutter * 0.5}px`, // 20px
+          "-gut-1/2": `${gutter * -0.5}px`, // -20px
+          gut: `${gutter}px`, // 40px
+          "-gut": `${gutter * -1}px`, // -40px
+          "gut-3/2": `${gutter * 1.5}px`, // 60px
+          "-gut-3/2": `${gutter * -1.5}px`, // -60px
+          semicol: `${col * 0.5}px`, // 50px
+          "-semicol": `${col * -0.5}px`, // -50px
+          "col-3/4": `${col * 0.75}px`, // 75px
+          "-col-3/4": `${col * -0.75}px`, // -75px
+          col: `${col}px`, // 100px
+          "col-1": `${col}px`, // 100px
+          "col-2": `${col * 2}px`, // 200px
+          "col-3": `${col * 3}px`, // 300px
+          "col-4": `${col * 4}px`, // 400px
+          "col-5": `${col * 5}px`, // 500px
+          "col-6": `${col * 6}px`, // 600px
+          "col-7": `${col * 7}px`, // 700px
+          "col-8": `${col * 8}px`, // 800px
+          "col-9": `${col * 9}px`, // 900px
+          "col-10": `${col * 10}px`, // 1000px
+          "col-11": `${col * 11}px`, // 1100px
+          "col-12": `${col * 12}px` // 1200px
         };
 
         for (let i = 1; i <= 12; i++) {

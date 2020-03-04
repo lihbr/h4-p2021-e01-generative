@@ -18,7 +18,7 @@ export default class Render {
     renderer.setClearColor(0x000000, 0);
 
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(ctx.sizes.width, ctx.sizes.height);
+    renderer.setSize(ctx.sizes.cWidth, ctx.sizes.cHeight);
 
     renderer.physicallyCorrectLights = true;
     renderer.gammaFactor = 2.2;
@@ -26,8 +26,8 @@ export default class Render {
     renderer.autoClear = false;
 
     // Events
-    ctx.sizes.on("resize", ({ width, height }) => {
-      renderer.setSize(width, height);
+    ctx.sizes.on("resize", ({ cWidth, cHeight }) => {
+      renderer.setSize(cWidth, cHeight);
     });
 
     const composer = new EffectComposer(renderer);

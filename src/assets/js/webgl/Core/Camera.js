@@ -15,7 +15,7 @@ export default class Camera {
     // Definition
     const camera = new PerspectiveCamera(
       50,
-      ctx.sizes.width / ctx.sizes.height,
+      ctx.sizes.cWidth / ctx.sizes.cHeight,
       1,
       2000
     );
@@ -34,8 +34,8 @@ export default class Camera {
     ctx.scene.add(origin);
 
     // Events
-    ctx.sizes.on("resize", ({ width, height }) => {
-      this.updateCamera(width, height);
+    ctx.sizes.on("resize", ({ width, height, cWidth, cHeight }) => {
+      this.updateCamera(cWidth, cHeight);
       this.updateResponsive(width, height);
     });
 
@@ -89,10 +89,18 @@ export default class Camera {
   }
 
   updateResponsive(width, height) {
-    if (width > 1024) {
-      this.responsive.position.set(-40, 0, 0);
+    if (this._ctx._type === "duo") {
+      if (width > 1024) {
+        this.responsive.position.set(-50, 40, 0);
+      } else {
+        this.responsive.position.set(0, 0, 0);
+      }
     } else {
-      this.responsive.position.set(0, 0, 0);
+      if (width > 1024) {
+        this.responsive.position.set(0, -20, 0);
+      } else {
+        this.responsive.position.set(0, 0, 0);
+      }
     }
   }
 
