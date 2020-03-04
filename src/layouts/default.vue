@@ -1,15 +1,24 @@
 <template>
   <div class="__layout__default">
+    <site-header />
     <main class="main">
       <nuxt />
     </main>
+    <site-footer />
   </div>
 </template>
 
 <script>
 import objectFitImages from "object-fit-images";
 
+import SiteHeader from "~/components/partials/Header.vue";
+import SiteFooter from "~/components/partials/Footer.vue";
+
 export default {
+  components: {
+    SiteHeader,
+    SiteFooter
+  },
   head() {
     return {
       htmlAttrs: {
@@ -62,4 +71,7 @@ html
   -moz-osx-font-smoothing: grayscale
   -webkit-font-smoothing: antialiased
   box-sizing: border-box
+
+  +themify()
+  +themifyColor("green", "white")
 </style>

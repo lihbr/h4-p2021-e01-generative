@@ -47,6 +47,8 @@ export default class WorldHero {
 
     this._cup.children[0].scale.set(1.3, 1.3, 1.3);
 
+    this._cup.rotation.z = Math.PI / 2;
+
     this._cup.scale.set(0.001, 0.001, 0.001);
 
     ctx.animationController.add({

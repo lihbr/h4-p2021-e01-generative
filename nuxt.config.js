@@ -83,7 +83,7 @@ module.exports = async () => {
     /*
      ** Global CSS
      */
-    css: ["~/assets/sass/style.sass"],
+    css: ["~/assets/sass/style.sass", "swiper/dist/css/swiper.css"],
 
     /*
      ** Plugins to load before mounting the App
@@ -91,7 +91,8 @@ module.exports = async () => {
     plugins: [
       "~/plugins/logger",
       "~/plugins/filters",
-      { src: "~/plugins/welcome", mode: "client" }
+      { src: "~/plugins/welcome", mode: "client" },
+      { src: "~/plugins/swiper.js", ssr: false }
     ],
 
     /*

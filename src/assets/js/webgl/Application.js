@@ -5,7 +5,8 @@ import Core from "./Core";
 import { Scene } from "three";
 
 export default class Application {
-  constructor($container, WorldClass) {
+  constructor($container, WorldClass, type) {
+    this._type = type;
     this._$container = $container;
     this._$canvas = $container.querySelector(".webgl");
     if (!this._$canvas) {
@@ -24,7 +25,7 @@ export default class Application {
 
   init(WorldClass) {
     this.time = new Core.Time();
-    this.sizes = new Core.Sizes();
+    this.sizes = new Core.Sizes(this._$canvas);
     this.mouse = new Core.Mouse(this.time, this.sizes);
     this.animationController = new Core.AnimationController(this.time);
 
