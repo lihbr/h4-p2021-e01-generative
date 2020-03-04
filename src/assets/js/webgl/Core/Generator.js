@@ -170,16 +170,18 @@ class Rect extends RandomHelper {
 }
 
 export default class Generator extends RandomHelper {
-  constructor(ctx, prefix) {
+  constructor(prefix) {
     super();
 
-    this._ctx = ctx;
-    this._ctx2d = ctx._ctx2d;
-    this._prefix = prefix;
-
-    // Generator config
     this._w = 1900;
     this._h = 1150;
+
+    this._$canvas = document.createElement("canvas");
+    this._$canvas.width = this._w;
+    this._$canvas.height = this._h;
+
+    this._ctx2d = this._$canvas.getContext("2d");
+    this._prefix = prefix;
   }
 
   generate(seed, country = "Germany") {

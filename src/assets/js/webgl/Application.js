@@ -13,12 +13,6 @@ export default class Application {
       return logger.error(".webgl not found inside container!");
     }
 
-    const $ctx2d = $container.querySelector(".ctx2d");
-    if (!$ctx2d) {
-      return logger.error(".ctx2d not found inside container!");
-    }
-    this._ctx2d = $ctx2d.getContext("2d");
-
     this.init(WorldClass);
     this.start();
   }
@@ -33,7 +27,7 @@ export default class Application {
     this.render = new Core.Render(this);
     this.camera = new Core.Camera(this);
 
-    this.generator = new Core.Generator(this, "PARIS 2024");
+    this.generator = new Core.Generator("PARIS 2024");
 
     this.world = new WorldClass(this);
     this.world.load(this);
