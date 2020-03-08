@@ -4,6 +4,8 @@
       <canvas ref="canvas" class="canvas" width="1900" height="1150" />
       <label for="seed">Seed:</label>
       <input id="seed" ref="input" v-model="seed" type="text" />
+      <label for="country">Country:</label>
+      <input id="country" ref="input" v-model="country" type="text" />
       <button
         class="bg-black text-white px-1 opacity-70 hover:opacity-100"
         @click="seed = '' + Math.random()"
@@ -27,7 +29,8 @@ export default {
   layout: "blank",
   data() {
     return {
-      seed: ""
+      seed: "",
+      country: "Germany"
     };
   },
   watch: {
@@ -36,10 +39,15 @@ export default {
         this.$router.replace(`/generator/${this.seed}`);
         this.updateCanvas();
       }
+    },
+    country: {
+      handler() {
+        this.updateCanvas();
+      }
     }
   },
   mounted() {
-    this.seed = this.$route.params.seed || Math.random();
+    this.seed = this.$route.params.seed || "" + Math.random();
     this.$refs.input.focus();
     this.$options.data.generator = new Generator("PARIS 2024");
     this.updateCanvas();
@@ -50,7 +58,10 @@ export default {
         return;
       }
 
-      const img = this.$options.data.generator.generate(this.seed, "Germany");
+      const img = this.$options.data.generator.generate(
+        this.seed,
+        this.country
+      );
 
       const ctx = this.$refs.canvas.getContext("2d");
 
