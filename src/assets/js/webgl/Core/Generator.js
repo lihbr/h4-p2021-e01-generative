@@ -2,7 +2,7 @@ import seedrandom from "seedrandom";
 
 const BLACK = "#282423";
 const STROKE_WIDTH = 10;
-const COMPOSITE_OPERATION = "exclusion";
+const COMPOSITE_OPERATION = "source-over"; // "exclusion";
 const HSL = {
   saturation: {
     base: 90,
@@ -13,10 +13,11 @@ const HSL = {
     amplitude: 5
   }
 };
-const COLOR_NUM = [2, 3]; // always 2
-const RECT_NUM = [8, 14];
-const RECT_WIDTH = [50, 400];
-const RECT_HEIGHT = [200, 400];
+const COLOR_NUM = [5, 6]; // always 2
+const RECT_NUM = [10, 20];
+const RECT_WIDTH = [25, 300];
+const RECT_HEIGHT = [100, 300];
+const DEFAULT_PRECISION = 50;
 
 const round = (value, precision = 1) => {
   return Math.round(value / precision) * precision;
@@ -89,7 +90,7 @@ class RandomHelper {
  * Rect class
  */
 class Rect extends RandomHelper {
-  constructor(prng, color, ctx, ctxW, ctxH, precision = 100) {
+  constructor(prng, color, ctx, ctxW, ctxH, precision = DEFAULT_PRECISION) {
     super();
     this._prng = prng;
     this._color = color;
@@ -134,7 +135,7 @@ class Rect extends RandomHelper {
     this._ctx.rotate(-this.angle);
   }
 
-  _drawText(text) {
+  _drawText(text = "") {
     this._ctx.rotate(this.angle);
 
     this._ctx.globalCompositeOperation = "source-over";
@@ -146,7 +147,7 @@ class Rect extends RandomHelper {
     this._ctx.stroke();
 
     this._ctx.beginPath();
-    this._ctx.font = "bold 30px monospace";
+    this._ctx.font = "bold 40px monospace";
     this._ctx.fillStyle = BLACK;
     const offset = this.startY > 100 ? -14 : 34;
 
@@ -202,6 +203,9 @@ export default class Generator extends RandomHelper {
     }
 
     rects[0].drawText(this.getText(country));
+    if (this._prng() > 0.33) {
+      rects[1].drawText();
+    }
 
     // ctx.beginPath();
     // ctx.lineWidth = this.round(this.randomInt(30, 100), 10);
@@ -215,7 +219,20 @@ export default class Generator extends RandomHelper {
   getColors() {
     const colorNum = this.randomInt(...COLOR_NUM);
     const startOffset = this.randomInt(256);
-    const colors = [];
+    const colors = [
+      "#759f53",
+      "#fd7b05",
+      "#e84311",
+      "#6d313e",
+      "#3c496f",
+      "#fecc0d"
+    ];
+
+    const pop = this.randomInt(1, 5);
+    for (let i = 0; i < pop; i++) {
+      colors[this.randomInt(0, colors.length)] = false;
+    }
+    return colors.filter(color => color);
 
     for (let i = 0; i < colorNum; i++) {
       colors.push(

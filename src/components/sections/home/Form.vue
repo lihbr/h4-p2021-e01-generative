@@ -5,8 +5,8 @@
         Mon écocup
       </h2>
       <p
-        class="text-center leading-snug max-w-col-6 mx-auto"
         v-if="currentStep < steps.length"
+        class="text-center leading-snug max-w-col-6 mx-auto"
       >
         Selectionnez un menu, une boisson et un pays afin de générer votre
         ecocup, unique et tellement vous !<br />Disponible dans tous les
@@ -305,8 +305,8 @@ export default {
           img: "/assets/img/form/3_uk.png"
         },
         {
-          name: "États-Unis",
-          name_en: "USA",
+          name: "États-Unis d'Amérique",
+          name_en: "United States of America",
           img: "/assets/img/form/3_us.png"
         }
       ],
