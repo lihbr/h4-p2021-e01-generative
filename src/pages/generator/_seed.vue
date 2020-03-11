@@ -5,7 +5,7 @@
       <label for="seed">Seed:</label>
       <input id="seed" ref="input" v-model="seed" type="text" />
       <label for="country">Country:</label>
-      <input id="country" ref="input" v-model="country" type="text" />
+      <input id="country" v-model="country" type="text" />
       <button
         class="bg-black text-white px-1 opacity-70 hover:opacity-100"
         @click="seed = '' + Math.random()"
