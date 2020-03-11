@@ -16,7 +16,7 @@ const colors = {
   yellow: "#ffc72c",
   red: "#da291c"
 };
-const colorOpacityVariants = [20];
+const colorOpacityVariants = [5, 20];
 const colorLightenVariants = [20];
 
 /**

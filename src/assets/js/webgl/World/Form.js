@@ -42,12 +42,10 @@ export default class WorldHero {
 
   createCup(ctx) {
     this._cup = new Cup({
-      imageData: ctx.generator.generate(3, "ITALY")
+      imageData: ctx.generator.generate(ctx._extra.seed, ctx._extra.country)
     }).object;
 
     this._cup.children[0].scale.set(1.3, 1.3, 1.3);
-
-    this._cup.rotation.z = Math.PI / 2;
 
     this._cup.scale.set(0.001, 0.001, 0.001);
 
@@ -69,6 +67,7 @@ export default class WorldHero {
     // Update cups
     this._cup.rotation.x = Math.sin(elapsed / 7000) / 6;
     this._cup.rotation.y = Math.sin(elapsed / 8000) / 4;
+    this._cup.rotation.z = elapsed / 7000;
 
     // Raycaster
     const { x, y } = this._ctx.mouse;

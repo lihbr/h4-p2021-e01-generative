@@ -5,8 +5,9 @@ import Core from "./Core";
 import { Scene } from "three";
 
 export default class Application {
-  constructor($container, WorldClass, type) {
+  constructor($container, WorldClass, type, extra = {}) {
     this._type = type;
+    this._extra = extra;
     this._$container = $container;
     this._$canvas = $container.querySelector(".webgl");
     if (!this._$canvas) {

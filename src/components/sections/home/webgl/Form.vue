@@ -11,6 +11,16 @@
 
 <script>
 export default {
+  props: {
+    seed: {
+      type: String,
+      default: "__noSeed"
+    },
+    country: {
+      type: String,
+      default: "__noCountry"
+    }
+  },
   data() {
     return {
       inited: false
@@ -32,13 +42,22 @@ export default {
       this.$options._application = new Application(
         this.$refs.container,
         WorldForm,
-        "single"
+        "single",
+        {
+          seed: this.seed,
+          country: this.country
+        }
       );
     }
   },
   destroyed() {
     if (this.$options._supportWebGl) {
       this.$options._application.destructor();
+    }
+  },
+  methods: {
+    generate(seed, country) {
+      console.log({ seed, country });
     }
   }
 };
