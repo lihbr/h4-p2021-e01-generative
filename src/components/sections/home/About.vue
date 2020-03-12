@@ -7,28 +7,32 @@
       <div class="-mx-gut-1/2 lg:flex">
         <div class="lg:w-col-5 px-gut-1/2">
           <p class="text-p mb-8">
-            Spécialement pour les Jeux Olympiques de 2024 à Paris, McDonald’s a
-            crée une série limitée et exclusive de design génératif.
+            Pour célébrer ce formidable évènement qui se tiendra en France,
+            McDonald’s a créé une série limitée et exclusive de designs
+            génératifs.
           </p>
           <p class="text-p mb-8">
-            En choisissant son menu, sa boisson et son pays, l’utilisateur aura
-            la chance d’obtenir un écocup unique avec un design généré
-            automatiquement à partir de ses préférences !
+            En choisissant un menu, une boisson, et un pays, vous aurez la
+            chance de recevoir <strong>un ecocup unique</strong>, en fonction de
+            vos préférences.
           </p>
           <div class="slider block lg:hidden mb-10">
             <carousel />
           </div>
           <p class="text-p mb-8">
-            Cette édition est évolutive : toutes les semaines, de nouveaux
-            motifs et formes seront introduites.
+            Vous l’aurez compris, il existe une
+            <strong>infinité de combinaisons</strong>, et par conséquent, une
+            infinité de designs différents pour vos gobelets !
           </p>
           <p class="text-p mb-8">
-            Toutes ces possibilités vous donne le choix dans une infinité de
-            designs !
+            Pour encore plus de diversité, de
+            <strong>nouveaux motifs et formes</strong> seront introduits jour
+            après jour. Il n’y a aucune chance que vos proches aient le même
+            gobelet que vous, alors, chérissez-le !
           </p>
           <p class="text-p mb-12">
-            Alors soyez prêt pour ce mois sous le signe des Jeux Olympiques et
-            de la ville Lumière !
+            Préparez-vous pour ce mois placé sous le signe des Jeux Olympiques
+            et de la ville Lumière !
           </p>
         </div>
         <div class="flex-1 px-gut-1/2 h-col-6 lg:h-auto">

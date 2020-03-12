@@ -45,9 +45,14 @@ export default class WorldHero {
 
     const cups = {
       first: new Cup({
-        imageData: ctx.generator.generate(1, "UNITED STATES OF AMERICA")
+        imageData: ctx.generator.generate(
+          "" + Math.random(),
+          "UNITED STATES OF AMERICA"
+        )
       }).object,
-      second: new Cup({ imageData: ctx.generator.generate(2, "JAPAN") }).object
+      second: new Cup({
+        imageData: ctx.generator.generate("" + Math.random(), "JAPAN")
+      }).object
     };
 
     cups.first.rotation.x = Math.PI / 2.4;

@@ -2,15 +2,15 @@
   <div id="form" class="form relative bg-lightGrey pt-16 pb-gut">
     <container>
       <h2 class="text-center heading-h1 mb-semicol">
-        Mon écocup
+        Mon ecocup
       </h2>
       <p
         v-if="currentStep < steps.length"
         class="text-center leading-snug max-w-col-6 mx-auto"
       >
-        Selectionnez un menu, une boisson et un pays afin de générer votre
-        ecocup, unique et tellement vous !<br />Disponible dans tous les
-        restaurants participants.
+        Sélectionnez un menu, une boisson, et un pays afin de générer l’ecocup
+        qui vous ressemble. Quelque chose d’unique, sans aucun doute !<br />(Offre
+        soumise à conditions, dans tous les restaurants participants)
       </p>
       <form id="form-el" action="" class="mt-10">
         <header class="header">
@@ -38,12 +38,13 @@
             </div>
             <div v-else key="final" class="text-center">
               <div class="text-2xl text-green font-sub">
-                Et voila !
+                Et voilà
               </div>
 
               <div>
-                Voici un exemple d'écocup unique que vous pouvez avoir en
-                commandant ce menu
+                Vous ne seriez pas médaillé d’or en design de gobelets à tout
+                hasard ?<br />Voici un ecocup que vous pourriez avoir en
+                commandant ce menu lors des JO Paris 2024 !
               </div>
             </div>
           </transition>

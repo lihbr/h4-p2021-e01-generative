@@ -3,21 +3,16 @@ import seedrandom from "seedrandom";
 const BLACK = "#282423";
 const STROKE_WIDTH = 10;
 const COMPOSITE_OPERATION = "source-over"; // "exclusion";
-const HSL = {
-  saturation: {
-    base: 90,
-    amplitude: 5
-  },
-  lightness: {
-    base: 55,
-    amplitude: 5
-  }
-};
-const COLOR_NUM = [5, 6]; // always 2
-const RECT_NUM = [10, 20];
-const RECT_WIDTH = [25, 300];
-const RECT_HEIGHT = [100, 300];
-const DEFAULT_PRECISION = 50;
+const COLOR_NUM = [2, 6];
+const CIRCLE_PERCENTAGE = 0;
+const ANOTHER_LINE_PERCENTAGE = 0.5;
+const ROTATED_PERCENTAGE = 0.4;
+
+const FORM_NUM = [10, 20];
+const FORM_WIDTH = [50, 300];
+const FORM_HEIGHT = [100, 300];
+
+const DEFAULT_PRECISION = 75;
 
 const round = (value, precision = 1) => {
   return Math.round(value / precision) * precision;
@@ -47,25 +42,6 @@ class RandomHelper {
     return array[Math.floor(this._prng() * array.length)];
   }
 
-  randomHsl(hue) {
-    if (!this.hasPrng()) {
-      return;
-    }
-
-    if (!hue) {
-      hue = this.randomInt(256);
-    } else {
-      hue %= 256;
-    }
-
-    const { saturation, lightness } = HSL;
-
-    const samp = this.randomInt(-saturation.amplitude, saturation.amplitude);
-    const lamp = this.randomInt(-lightness.amplitude, lightness.amplitude);
-
-    return `hsl(${hue}, ${saturation.base + samp}%, ${lightness.base + lamp}%)`;
-  }
-
   hasPrng() {
     if (typeof this._prng === "undefined") {
       console.error(
@@ -87,9 +63,9 @@ class RandomHelper {
 }
 
 /**
- * Rect class
+ * Form class
  */
-class Rect extends RandomHelper {
+class Form extends RandomHelper {
   constructor(prng, color, ctx, ctxW, ctxH, precision = DEFAULT_PRECISION) {
     super();
     this._prng = prng;
@@ -99,8 +75,14 @@ class Rect extends RandomHelper {
     this._ctxH = ctxH;
     this._precision = precision;
 
-    this.w = round(this.randomInt(...RECT_WIDTH), this._precision);
-    this.h = round(this.randomInt(...RECT_HEIGHT), this._precision);
+    this._isCircle = this._prng() > 1 - CIRCLE_PERCENTAGE;
+
+    this.w = round(this.randomInt(...FORM_WIDTH), this._precision);
+    if (this._isCircle) {
+      this.h = this.w;
+    } else {
+      this.h = round(this.randomInt(...FORM_HEIGHT), this._precision);
+    }
 
     this.startX = round(
       (this._ctxW - this.w) / 2 +
@@ -114,9 +96,22 @@ class Rect extends RandomHelper {
       this._precision * 2
     );
 
-    // 45° 25%
+    // 45°
     this.angle =
-      45 * this.randomInt(2) * (Math.PI / 180) * (this.randomInt(3) === 0);
+      45 *
+      this.randomInt(2) *
+      (Math.PI / 180) *
+      (this._prng() > 1 - ROTATED_PERCENTAGE);
+
+    if (!this._isCircle) {
+      const maxRatio = Math.max(Math.cos(this.angle), Math.sin(this.angle));
+      const newW = this.w * maxRatio;
+      const newH = this.h * maxRatio;
+      this.startX += (this.w - newW) / 2;
+      this.startY += (this.h - newH) / 2;
+      this.w = newW;
+      this.h = newH;
+    }
 
     // Wrap 3 times
     this.drawShape = this._draw.bind(this, this._drawShape.bind(this));
@@ -127,7 +122,11 @@ class Rect extends RandomHelper {
     this._ctx.rotate(this.angle);
 
     this._ctx.beginPath();
-    this._ctx.rect(-this.w / 2, -this.h / 2, this.w, this.h);
+    if (this._isCircle) {
+      this._ctx.arc(0, 0, this.w, 0, Math.PI * 2);
+    } else {
+      this._ctx.rect(-this.w / 2, -this.h / 2, this.w, this.h);
+    }
     this._ctx.globalCompositeOperation = COMPOSITE_OPERATION;
     this._ctx.fillStyle = this._color;
     this._ctx.fill();
@@ -149,7 +148,7 @@ class Rect extends RandomHelper {
     this._ctx.beginPath();
     this._ctx.font = "bold 40px monospace";
     this._ctx.fillStyle = BLACK;
-    const offset = this.startY > 100 ? -14 : 34;
+    const offset = this.startY > 100 ? -14 : 40;
 
     this._ctx.fillText(text, 0, -this.h / 2 + offset);
 
@@ -194,31 +193,26 @@ export default class Generator extends RandomHelper {
 
     const colors = this.getColors();
 
-    const rectNum = this.randomInt(...RECT_NUM);
-    const rects = [];
-    for (let i = 0; i < rectNum; i++) {
-      const rect = new Rect(this._prng, colors[i % colors.length], ctx, w, h);
-      rect.drawShape();
-      rects.push(rect);
+    const formNum = this.randomInt(...FORM_NUM);
+    const forms = [];
+    for (let i = 0; i < formNum; i++) {
+      const form = new Form(this._prng, colors[i % colors.length], ctx, w, h);
+      form.drawShape();
+      forms.push(form);
     }
 
-    rects[0].drawText(this.getText(country));
-    if (this._prng() > 0.33) {
-      rects[1].drawText();
+    forms[0].drawText(this.getText(country));
+    if (this._prng() > 1 - ANOTHER_LINE_PERCENTAGE) {
+      forms[1].drawText();
+      if (this._prng() > 1 - ANOTHER_LINE_PERCENTAGE) {
+        forms[2].drawText();
+      }
     }
-
-    // ctx.beginPath();
-    // ctx.lineWidth = this.round(this.randomInt(30, 100), 10);
-    // ctx.strokeStyle = this.randomHsl();
-    // ctx.arc(w / 2, h / 2, 100, 0, Math.PI * 2);
-    // ctx.stroke();
 
     return ctx.getImageData(0, 0, w, h);
   }
 
   getColors() {
-    const colorNum = this.randomInt(...COLOR_NUM);
-    const startOffset = this.randomInt(256);
     const colors = [
       "#759f53",
       "#fd7b05",
@@ -228,21 +222,13 @@ export default class Generator extends RandomHelper {
       "#fecc0d"
     ];
 
-    const pop = this.randomInt(1, 5);
+    const pop = this.randomInt(
+      ...COLOR_NUM.map(n => colors.length - n + 1).reverse()
+    );
     for (let i = 0; i < pop; i++) {
       colors[this.randomInt(0, colors.length)] = false;
     }
     return colors.filter(color => color);
-
-    for (let i = 0; i < colorNum; i++) {
-      colors.push(
-        this.randomHsl(
-          startOffset + i * (256 / colorNum / 1.5) + this.randomInt(-8, 8)
-        )
-      );
-    }
-
-    return colors;
   }
 
   clear() {

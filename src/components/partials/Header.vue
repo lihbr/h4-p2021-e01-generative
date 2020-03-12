@@ -14,7 +14,7 @@
         class="navItem"
         @click.native.prevent.stop="scrollTo('#form')"
       >
-        Votre écocup
+        Votre ecocup
       </smart-link>
     </container>
   </header>
