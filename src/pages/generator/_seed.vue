@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import Generator from "~/assets/js/webgl/Core/Generator";
+import Generator from "~/assets/js/webgl/Generator";
 
 export default {
   layout: "blank",

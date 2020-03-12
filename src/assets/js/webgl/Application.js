@@ -1,6 +1,7 @@
 import logger from "~/assets/js/logger";
 
 import Core from "./Core";
+import Generator from "./Generator";
 
 import { Scene } from "three";
 
@@ -28,7 +29,7 @@ export default class Application {
     this.render = new Core.Render(this);
     this.camera = new Core.Camera(this);
 
-    this.generator = new Core.Generator("PARIS 2024");
+    this.generator = new Generator("PARIS 2024");
 
     this.world = new WorldClass(this);
     this.world.load(this);
