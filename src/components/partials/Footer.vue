@@ -30,7 +30,7 @@
             class="font-medium"
             href="https://www.mcdonalds.fr/"
           >
-            Official Website
+            Site officiel
           </smart-link>
         </div>
         <div class="h-px bg-grey mb-3 mt-gut-1/2" />
